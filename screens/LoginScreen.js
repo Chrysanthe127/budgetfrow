@@ -14,19 +14,14 @@ export default function LoginScreen({ navigation }) {
       await login(username, password);
       navigation.replace('Home');
     } catch (error) {
-      let message = 'Identifiants incorrects ou serveur indisponible';
+      let message = 'Identifiants incorrects.';
       if (error.response) {
         const data = error.response.data;
         if (data.detail) message = data.detail;
         else if (data.error) message = data.error;
-        else if (typeof data === 'string') message = data;
         else message = JSON.stringify(data);
-      } else if (error.request) {
-        message = 'Impossible de contacter le serveur. Vérifiez votre connexion.';
-      } else {
-        message = error.message;
       }
-      Alert.alert('Erreur', message);
+      Alert.alert('❌ Erreur de connexion', message);
     } finally {
       setLoading(false);
     }
