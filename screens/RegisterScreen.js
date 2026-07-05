@@ -23,11 +23,19 @@ export default function RegisterScreen({ navigation }) {
     }
     try {
       await register(username, password, email);
+      Alert.alert('✅ Succès', 'Compte créé avec succès ! Vous allez être connecté.');
       await login(username, password);
       navigation.replace('Home');
     } catch (error) {
-      console.error(error);
-      Alert.alert('Erreur', 'Nom déjà utilisé ou problème serveur');
+      let message = 'Erreur lors de l\'inscription.';
+      if (error.response) {
+        const data = error.response.data;
+        if (data.error) message = data.error;
+        else if (data.detail) message = data.detail;
+        else if (data.message) message = data.message;
+        else message = JSON.stringify(data);
+      }
+      Alert.alert('❌ Erreur', message);
     }
   };
 
